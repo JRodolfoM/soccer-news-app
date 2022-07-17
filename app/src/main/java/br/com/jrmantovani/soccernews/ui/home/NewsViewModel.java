@@ -8,21 +8,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.jrmantovani.soccernews.domain.News;
+import br.com.jrmantovani.soccernews.remote.SoccerNewsApi;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsViewModel extends ViewModel {
 
-    private final MutableLiveData<List<News>> news;
-
+    private final MutableLiveData<List<News>> news = new MutableLiveData<>();
+   private SoccerNewsApi soccerNewsApi;
     public NewsViewModel() {
-        news = new MutableLiveData<>();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jrodolfom.github.io/soccer-news-api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        //TODO Remover Mock de Noticias
-        List<News> news = new ArrayList<>();
-        news.add(new News("Ferroviária tem Desfalques Importante", "Mussum Ipsum, cacilds vidis litro abertis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.Em pé sem cair, deitado sem dormir, sentado sem cochilar "));
-        news.add(new News("Ferrinha Joga no Sabado", "Mussum Ipsum, cacilds vidis litro abertis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.Em pé sem cair, deitado sem dormir, sentado sem cochilar "));
-        news.add(new News("Copa do Mundo Feminina esta terminando", "Mussum Ipsum, cacilds vidis litro abertis. Interessantiss quisso pudia ce receita de bolis, mais bolis eu num gostis.Em pé sem cair, deitado sem dormir, sentado sem cochilar "));
+        soccerNewsApi = retrofit.create(SoccerNewsApi.class);
 
-        this.news.setValue(news);
+        findNews();
+    }
+
+    private void findNews() {
+        soccerNewsApi.getNews().enqueue(new Callback<List<News>>() {
+            @Override
+            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
+                if(response.isSuccessful()){
+                    news.setValue(response.body());
+                }else{
+                    //TODO Pensar ema estrategia de tratamento de erro
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<News>> call, Throwable t) {
+                //TODO Pensar ema estrategia de tratamento de erro
+            }
+        });
     }
 
     public LiveData<List<News>> getNews() {
