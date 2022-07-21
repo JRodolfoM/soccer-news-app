@@ -1,4 +1,4 @@
-package br.com.jrmantovani.soccernews;
+package br.com.jrmantovani.soccernews.ui;
 
 import android.os.Bundle;
 
@@ -9,18 +9,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.room.Room;
 
-import br.com.jrmantovani.soccernews.data.local.AppDatabase;
+
+import br.com.jrmantovani.soccernews.R;
+import br.com.jrmantovani.soccernews.data.local.SoccerNewsDb;
 import br.com.jrmantovani.soccernews.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-
-
-    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +37,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        setupLocalDb();
+
     }
 
-    private void setupLocalDb() {
-        db = Room.databaseBuilder(this, AppDatabase.class, "soccer-news")
-                .allowMainThreadQueries()
-                .build();
-    }
-    public AppDatabase getDb() {
-        return db;
-    }
+
 
 }
