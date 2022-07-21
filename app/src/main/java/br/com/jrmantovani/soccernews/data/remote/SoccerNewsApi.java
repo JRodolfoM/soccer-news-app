@@ -1,4 +1,4 @@
-package br.com.jrmantovani.soccernews.remote;
+package br.com.jrmantovani.soccernews.data.remote;
 
 import java.util.List;
 
