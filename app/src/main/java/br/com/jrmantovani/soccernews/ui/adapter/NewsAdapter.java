@@ -70,6 +70,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public int getItemCount() {
         return this.news.size();
     }
+
     public static class ViewHolder extends  RecyclerView.ViewHolder{
 
         private final NewsItemBinding binding;
